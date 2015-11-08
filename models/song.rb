@@ -1,10 +1,17 @@
 class Song < ActiveRecord::Base
   belongs_to :singer
-  scope :fulltext, ->(query) { where("plainto_tsquery(:query) @@ to_tsvector(lyrics)", query: query) }
   scope :ilike,    ->(query) { where("lyrics ilike :query", query: "%#{query}%") }
-  scope :rank,     ->(query) { fulltext(query).select("*, ts_rank(to_tsvector(lyrics), plainto_tsquery('#{query}')) as rank").order('rank DESC') }
-  scope :rank_cd,  ->(query) { fulltext(query).select("*, ts_rank_cd(to_tsvector(lyrics), plainto_tsquery('#{query}')) as rank").order('rank DESC') }
-  scope :headline, ->(query) { rank(query).select("ts_headline(lyrics, plainto_tsquery('#{query}'), 'ShortWord=3') as headline") }
+
+  scope :fulltext, ->(query, rank_method) do
+     select('*')
+    .select("ts_headline(lyrics, plainto_tsquery('#{query}')) as headline")
+    .select("#{rank_method}(to_tsvector(lyrics), plainto_tsquery('#{query}')) as rank")
+    .where("plainto_tsquery('#{query}') @@ to_tsvector(lyrics)")
+    .order('rank DESC')
+  end
+
+  scope :ts_rank,    ->(query) { fulltext(query, :ts_rank) }
+  scope :ts_rank_cd, ->(query) { fulltext(query, :ts_rank_cd) }
 
   def duration
     Time.at(self[:duration]).strftime('%M:%S')

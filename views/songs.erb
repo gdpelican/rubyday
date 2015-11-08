@@ -5,7 +5,7 @@
 <h2>Search method: <%= @method %></h2>
 
 <div class="search-boxes">
-  <% [:ilike, :fulltext, :rank, :rank_cd, :headline].each do |method| %>
+  <% [:ilike, :ts_rank, :ts_rank_cd].each do |method| %>
     <div class="search-box">
       <form action="/search/<%= method %>" method="GET">
         <input style="float: left" type="text" name="q" placeholder="search via <%= method %>..." value="<%= @query if @method == method %>" />
