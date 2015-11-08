@@ -21,10 +21,11 @@ ActiveRecord::Schema.define(version: 20151102091820) do
   end
 
   create_table "songs", force: :cascade do |t|
-    t.string  "title"
-    t.integer "singer_id"
-    t.integer "duration"
-    t.text    "lyrics"
+    t.string   "title"
+    t.integer  "singer_id"
+    t.integer  "duration"
+    t.text     "lyrics"
+    t.tsvector "search_vector"
   end
 
 end

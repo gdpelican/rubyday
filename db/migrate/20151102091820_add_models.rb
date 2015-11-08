@@ -9,6 +9,7 @@ class AddModels < ActiveRecord::Migration
       t.belongs_to :singer
       t.integer :duration
       t.text :lyrics
+      t.tsvector :search_vector
     end
   end
 end
