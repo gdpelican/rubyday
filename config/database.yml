@@ -1,0 +1,6 @@
+development:
+  adapter: postgresql
+  database: rubyday_development
+  encoding: utf8
+  pool: 1000
+  timeout: 5000

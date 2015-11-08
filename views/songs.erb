@@ -1,0 +1,40 @@
+<h1>
+  <span>Searching Songs<span>
+  <span><%=": \"#{@query}\"" if @query %></span>
+</h1>
+<h2>Search method: <%= @method %></h2>
+
+<div class="search-boxes">
+  <% [:ilike, :fulltext, :rank, :rank_cd, :headline].each do |method| %>
+    <div class="search-box">
+      <form action="/search/<%= method %>" method="GET">
+        <input style="float: left" type="text" name="q" placeholder="search via <%= method %>..." value="<%= @query if @method == method %>" />
+      </form>
+    </div>
+  <% end %>
+</div>
+
+<div class="songs" style="clear:both">
+  <% if @songs.any? %>
+    <table class="song">
+      <thead>
+        <th>Title</th>
+        <th>Duration</th>
+        <th>Singer</th>
+        <th>Rank</th>
+        <th>Headline</th>
+      </thead>
+      <% @songs.each do |song| %>
+        <tr>
+          <td><%= song.title %></td>
+          <td><%= song.duration %></td>
+          <td><%= song.singer.name %></td>
+          <td><%= song.try(:rank) %></td>
+          <td><%= song.try(:headline) %></td>
+        </tr>
+      <% end %>
+    </table>
+    <% else %>
+      <div>No songs found!</div>
+    <% end %>
+  </div>
