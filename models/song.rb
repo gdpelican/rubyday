@@ -10,6 +10,8 @@ class Song < ActiveRecord::Base
     .order('rank DESC')
   end
 
+  scope :short, -> { where('duration < ?', 240) }
+
   scope :ts_rank,    ->(query) { fulltext(query, :ts_rank) }
   scope :ts_rank_cd, ->(query) { fulltext(query, :ts_rank_cd) }
 

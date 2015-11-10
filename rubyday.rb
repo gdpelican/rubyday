@@ -10,5 +10,6 @@ end
 get '/search/:method' do
   @method, @query = params[:method], params[:q]
   @songs = Song.send(@method, @query)
+  @songs = @songs.short if params[:short]
   erb :songs
 end
